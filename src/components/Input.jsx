@@ -36,7 +36,7 @@ export default function Input () {
   }
 
   return <SectionSt>
-    <InputSt type='text' onChange={(e) => setInputValue(e.target.value)} value={inputValue}/>
+    <InputSt type='text' onChange={(e) => setInputValue(e.target.value)} value={inputValue} placeholder='Enter your todo...'/>
     <Button func={updateAddData}>Add</Button>
   </SectionSt>
 }
