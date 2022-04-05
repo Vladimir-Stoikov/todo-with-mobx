@@ -1,8 +1,10 @@
 import React from 'react';
 import styled from 'styled-components'
 
+
 import Button from './Button';
 import CloseIcon from '@mui/icons-material/Close';
+import store from '../store/Store';
 
 const ToDoSt = styled.section`
  display: flex;
@@ -13,6 +15,8 @@ const ToDoSt = styled.section`
 `
 
 const TextSt = styled.div`
+ text-decoration: ${({crossText}) => crossText === true ? 'line-through' : 'none'};
+ user-select: none;
  border-top-left-radius: 5px;
  border-bottom-left-radius: 5px;
  width: 430px;
@@ -27,19 +31,20 @@ const TextSt = styled.div`
 `
 
 
-export default function ToDo({id, children, changeToDos}) {
+export default function ToDo({todo, id, rerender}) {
 
-  const deleteTodo = id => {
-    changeToDos(prev => {
-      const newTodos = prev.split(', ');
-      newTodos.splice(id, 1);
-      return newTodos.join(', ');
-    });
-  } 
+  function updateRemoveData(id) {
+    store.removeToDo(id);
+  }
+
+  function makeTodoComplete(id) {
+    store.completeTodo(id);
+    rerender(true);
+  }
 
   return <ToDoSt>
-    <TextSt>{children}</TextSt>
-    <Button func={() => deleteTodo(id)} fontSize='1rem' paddingSize='0.45rem 0.8rem 0'><CloseIcon /></Button>
+    <TextSt onClick={() => makeTodoComplete(id)} crossText={todo.complete}>{todo.text}</TextSt>
+    <Button func={() => updateRemoveData(id)} fontSize='1rem' paddingSize='0.45rem 0.8rem 0'><CloseIcon /></Button>
   </ToDoSt>
   
 }

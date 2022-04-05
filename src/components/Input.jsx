@@ -1,6 +1,8 @@
 import React, {useState} from 'react';
 import styled from 'styled-components'
+import { observer } from 'mobx-react-lite';
 
+import store from '../store/Store';
 import Button from './Button';
 
 const InputSt = styled.input`
@@ -24,23 +26,18 @@ const SectionSt = styled.section`
   margin-bottom: 1rem;
 `
 
-export default function Input({changeToDos}) {
+export default function Input () {
 
   const [inputValue, setInputValue] = useState('');
 
-  const getText = (event) => {
-    setInputValue(event.target.value);
-  }
-
-  const addToDo = () => {
-   if(inputValue.trim() !== '') {
-    changeToDos(prev => prev === '' ? inputValue : prev + ', ' + inputValue);
-   setInputValue('')
-   }   
+  function updateAddData() {
+    store.addToDo({text: inputValue, complete: false});
+    setInputValue('');
   }
 
   return <SectionSt>
-    <InputSt type='text' onChange={getText} value={inputValue}/>
-    <Button func={addToDo}>Add</Button>
+    <InputSt type='text' onChange={(e) => setInputValue(e.target.value)} value={inputValue}/>
+    <Button func={updateAddData}>Add</Button>
   </SectionSt>
 }
+
